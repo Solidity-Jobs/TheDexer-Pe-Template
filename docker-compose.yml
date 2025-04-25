@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mongodb: 
+    image: public.ecr.aws/docker/library/mongo:5.0.6
+    restart: unless-stopped
+    command: mongod --port 64335
+    ports:
+      - "64335:64335"
+    volumes: 
+      - mongodb:/data/db
+    env_file:
+      - .env
+
+  backend-private-dev:
+    image: dexer-private/backend-private-dev
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+  
+volumes:
+  mongodb:
+
+
+
